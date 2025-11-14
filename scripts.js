@@ -1,11 +1,11 @@
 // EXERCISE DATA - Add all exercises here
 const EXERCISES = [
     {
-        id: 'squat',
-        name: 'BACK SQUAT',
+        id: 'dumbbellfrontsquat',
+        name: 'Dumbbell Front Squat',
         targetReps: 12,
-        image: 'img/dumbbell_squat.jpg',
-        gif: 'img/dumbbell_squat.gif'
+        image: 'img/dumbbell_front_squat.jpg',
+        gif: 'img/dumbbell_front_squat.gif'
     },
     {
         id: 'deadlift',
@@ -27,6 +27,13 @@ const EXERCISES = [
         targetReps: 8,
         image: 'img/hammer_curl.jpg',
         gif: 'img/hammer_curl.gif'
+    },
+    {
+        id: 'widegrippushup',
+        name: 'Wide Grip Push Up',
+        targetReps: 20,
+        image: 'img/wide_grip_pushup.jpg',
+        gif: 'img/wide_grip_pushup.gif'
     }
 ];
 
@@ -98,21 +105,21 @@ const ExerciseTracker = {
                         <img src="${exercise.image}" class="img-fluid gallery-image w-full h-48 object-cover transition duration-200" alt="${exercise.name}">
                     </a>
                 </div>
-                <div class="col-8">
+                <div class="col-10">
                     <div class="row">
                         <div class="col">${exercise.name}: ${exercise.targetReps}</div>
                     </div>
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-4">
                             <input type="number" id="${exercise.id}-reps-${index}" placeholder="reps..." class="exercise-input">
                         </div>
-                        <div class="col-3">
+                        <div class="col-4">
                             <input type="number" id="${exercise.id}-weight-${index}" placeholder="weight..." class="exercise-input">
                         </div>
-                        <div class="col-2">
-                            <button class="btn btn-primary btn-sm submit-exercise" data-exercise="${exercise.id}" data-index="${index}">Submit</button>
+                        <div class="col-1 text-center">
+                            <button class="btn btn-primary btn-sm submit-exercise" data-exercise="${exercise.id}" data-index="${index}"><i class="bi bi-caret-right"></i></button>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3 text-end">
                             <span id="${exercise.id}-output-${index}"></span>
                             <i class="bi bi-x-circle clear-exercise" data-exercise="${exercise.id}" data-index="${index}" title="Clear exercise"></i>
                         </div>
