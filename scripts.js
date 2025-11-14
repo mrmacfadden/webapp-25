@@ -37,6 +37,35 @@ const EXERCISES = [
     }
 ];
 
+// WORKOUT PRESETS - Define different workout routines
+const WORKOUT_PRESETS = [
+    {
+        name: 'Full Body',
+        description: 'All exercises',
+        exercises: [1, 2, 3, 4, 5]
+    },
+    {
+        name: 'Leg Day',
+        description: 'Lower body focus',
+        exercises: [1, 2]
+    },
+    {
+        name: 'Upper Body',
+        description: 'Chest, back, arms',
+        exercises: [3, 4, 5]
+    },
+    {
+        name: 'Strength',
+        description: 'Heavy compound lifts',
+        exercises: [1, 2, 3]
+    },
+    {
+        name: 'Endurance',
+        description: 'High reps',
+        exercises: [4, 5]
+    }
+];
+
 // Exercise Tracker Module
 const ExerciseTracker = {
     lightboxConfig: {
@@ -49,9 +78,37 @@ const ExerciseTracker = {
     _lightboxInstance: null,
 
     init() {
+        this.renderMenu();
         this.renderExercises();
         this.initLightbox();
         this.loadSavedValues();
+    },
+
+    renderMenu() {
+        const menu = document.getElementById('workout-menu');
+        menu.innerHTML = '';
+
+        WORKOUT_PRESETS.forEach((preset, index) => {
+            const exerciseParams = preset.exercises.join(',');
+            const link = document.createElement('a');
+            link.href = `?e=${exerciseParams}`;
+            link.className = 'list-group-item list-group-item-action';
+            link.innerHTML = `
+                <div><strong>${preset.name}</strong></div>
+                <small class="text-muted">${preset.description}</small>
+            `;
+            menu.appendChild(link);
+        });
+
+        // Add "View All" option
+        const viewAllLink = document.createElement('a');
+        viewAllLink.href = '?';
+        viewAllLink.className = 'list-group-item list-group-item-action';
+        viewAllLink.innerHTML = `
+            <div><strong>View All</strong></div>
+            <small class="text-muted">All exercises</small>
+        `;
+        menu.appendChild(viewAllLink);
     },
 
     parseExerciseSelection() {
@@ -207,3 +264,57 @@ const ExerciseTracker = {
         });
     }
 };
+
+// TIMER NAVBAR FUNCTIONALITY
+const navbar   = document.getElementById('timerNavbar');
+  const timerBtn = document.getElementById('timerBtn');
+  const icon     = document.getElementById('stopwatchIcon');
+  let active = false, tid = null, startTime = 0;
+  let audioCtx = null;
+
+  timerBtn.addEventListener('click', () => {
+    if (active) reset(); else start();
+  });
+
+  function start() {
+    active = true;
+    startTime = Date.now();
+    navbar.classList.add('active');
+    icon.classList.replace('bi-stopwatch', 'bi-stopwatch-fill');
+    icon.classList.add('stopwatch-active');
+
+    void navbar.offsetWidth;
+    tid = setTimeout(reset, 30000);
+  }
+
+  function reset() {
+    clearTimeout(tid);
+    const finishedNaturally = active && Date.now() >= startTime + 30000;
+
+    active = false;
+    navbar.classList.remove('active');
+    icon.classList.replace('bi-stopwatch-fill', 'bi-stopwatch');
+    icon.classList.remove('stopwatch-active');
+
+    if (finishedNaturally) {
+      playBeep();
+    }
+  }
+
+  function playBeep() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.frequency.value = 200;
+    osc.type = 'square';
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.5);
+  }

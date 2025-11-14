@@ -23,7 +23,38 @@
         <script src="https://cdn.jsdelivr.net/npm/simplelightbox@2.14.2/dist/simple-lightbox.min.js"></script>
     </head>
     <body>
-        <div class="container" id="exercise-container"></div>
+    <!-- Navbar with Timer -->
+    <nav class="navbar navbar-light bg-light navbar-timer fixed-top" id="timerNavbar">
+        <div class="container-fluid">
+        <!-- Menu Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#workoutSidebar" aria-controls="workoutSidebar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Brand -->
+        <span class="navbar-brand mb-0 h1">SWOLL</span>
+
+        <!-- Stopwatch Timer Button -->
+        <button id="timerBtn" class="btn btn-link text-dark p-0 border-0" style="font-size: 1.5rem;">
+            <i class="bi bi-stopwatch" id="stopwatchIcon"></i>
+        </button>
+        </div>
+    </nav>
+
+        <!-- Offcanvas Sidebar -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="workoutSidebar" aria-labelledby="workoutSidebarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="workoutSidebarLabel">Workouts</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="list-group" id="workout-menu">
+                    <!-- Populated by JavaScript -->
+                </ul>
+            </div>
+        </div>
+
+        <div class="container mt-4" id="exercise-container"></div>
 
         <script src="scripts.js"></script>
         <script>
