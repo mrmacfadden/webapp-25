@@ -1,7 +1,8 @@
-body{
+body {
     background-color: #fff;
 }
-.container{
+
+.container {
     max-width: 1000px;
 }
 
@@ -10,8 +11,9 @@ body{
     border-bottom: 1px solid #dee2e6;
     transition: background-color 0.3s ease;
 }
-.exercise-row img{ 
-    max-height:90px;
+
+.exercise-row img { 
+    max-height: 90px;
 }
 
 .exercise-row:nth-child(odd) {
@@ -45,18 +47,37 @@ input.exercise-input {
     transition: transform 0.2s;
     cursor: pointer;
 }
+
 .image-link:hover .gallery-image {
-    transform: scale(1.05); /* Slightly scales the image on hover */
+    transform: scale(1.05);
 }
 
 /* SimpleLightbox custom styles */
 .sl-overlay {
     background: #000 !important;
-    opacity: 0.9 !important; /* Make background darker (default is 0.7) */
+    opacity: 0.9 !important;
 }
+
 .sl-wrapper .sl-navigation button {
-    color: #fff !important; /* Make navigation arrows more visible against darker background */
+    color: #fff !important;
 }
+
 .sl-wrapper .sl-close {
-    color: #fff !important; /* Make close button more visible against darker background */
+    color: #fff !important;
+}
+
+/* Clear exercise button */
+.clear-exercise {
+    cursor: pointer;
+    color: #dc3545;
+    margin-left: 0.5rem;
+    display: none;
+}
+
+.clear-exercise:hover {
+    color: #a02622;
+}
+
+.exercise-complete .clear-exercise {
+    display: inline;
 }

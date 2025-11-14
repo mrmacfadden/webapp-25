@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
     <head>
         <meta charset="utf-8">
@@ -10,7 +6,6 @@
         <title>Web App</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- MOBILE WEB APP, ADD THIS TO <head>..</head> OF index.html -->
         <link rel="icon" type="image/png" href="favicon.png" />
         <link rel="apple-touch-icon" href="favicon.png">
         <meta name="apple-mobile-web-app-title" content="Web App">
@@ -20,100 +15,18 @@
         <!-- STYLE SHEETS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplelightbox@2.14.2/dist/simple-lightbox.min.css">
         <link rel="stylesheet" href="style.css">
+
         <!-- JAVASCRIPT -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-        <!-- SimpleLightbox CSS & JS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplelightbox@2.14.2/dist/simple-lightbox.min.css">
         <script src="https://cdn.jsdelivr.net/npm/simplelightbox@2.14.2/dist/simple-lightbox.min.js"></script>
     </head>
     <body>
+        <div class="container" id="exercise-container"></div>
 
-        <div class="container">
-           <div class="row exercise-row" data-index="1">
-               <div class="col-2">
-                   <a href="img/dumbbell_squat.gif" class="lightbox">
-                       <img src="img/dumbbell_squat.jpg" class="img-fluid gallery-image w-full h-48 object-cover transition duration-200" alt="Dumbbell Squat">
-                   </a>
-               </div>
-               <div class="col-8">
-                    <div class="row">
-                        <div class="col">BACK SQUAT: 12</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-3">
-                            <input type="number" id="squat-reps" placeholder="reps..." class="exercise-input">
-                        </div>
-                        <div class="col-3">
-                            <input type="number" id="squat-weight" placeholder="weight..." class="exercise-input">
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-primary btn-sm submit-exercise" data-exercise="squat">Submit</button>
-                        </div>
-                        <div class="col-4"><span id="squat-output">12 x 40</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row exercise-row" data-index="2">
-                <div class="col-2">
-                    <a href="img/barbell_romanian_deadlift.gif" class="lightbox">
-                        <img src="img/barbell_romanian_deadlift.jpg" class="img-fluid gallery-image w-full h-48 object-cover transition duration-200" alt="Barbell Romainian Deadlift">
-                    </a>
-                </div>
-               <div class="col-8">
-                    <div class="row">
-                        <div class="col">Romanian Deadlft: 10</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-3">
-                            <input type="number" id="deadlift-reps" placeholder="reps..." class="exercise-input">
-                        </div>
-                        <div class="col-3">
-                            <input type="number" id="deadlift-weight" placeholder="weight..." class="exercise-input">
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-primary btn-sm submit-exercise" data-exercise="deadlift">Submit</button>
-                        </div>
-                        <div class="col-4"><span id="deadlift-output">12 x 135</span></div>
-                    </div>
-               </div>
-           </div>
-
-            <div class="row exercise-row" data-index="3">
-                <div class="col-2">
-                    <a href="img/barbell_romanian_deadlift.gif" class="lightbox">
-                        <img src="img/barbell_romanian_deadlift.jpg" class="img-fluid gallery-image w-full h-48 object-cover transition duration-200" alt="Barbell Romainian Deadlift">
-                    </a>
-                </div>
-               <div class="col-8">
-                    <div class="row">
-                        <div class="col">Bench Press: 8</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-3">
-                            <input type="number" id="deadlift-reps" placeholder="reps..." class="exercise-input">
-                        </div>
-                        <div class="col-3">
-                            <input type="number" id="deadlift-weight" placeholder="weight..." class="exercise-input">
-                        </div>
-                        <div class="col-2">
-                            <button class="btn btn-primary btn-sm submit-exercise" data-exercise="deadlift">Submit</button>
-                        </div>
-                        <div class="col-4"><span id="deadlift-output">12 x 135</span></div>
-                    </div>
-               </div>
-           </div>
-       </div>
-
-
-        <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-        
         <script src="scripts.js"></script>
         <script>
-            // Initialize the Exercise Tracker when the DOM is loaded
             document.addEventListener('DOMContentLoaded', function() {
                 ExerciseTracker.init();
             });
