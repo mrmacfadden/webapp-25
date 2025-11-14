@@ -116,10 +116,10 @@ const ExerciseTracker = {
                         <div class="col-4">
                             <input type="number" id="${exercise.id}-weight-${index}" placeholder="weight..." class="exercise-input">
                         </div>
-                        <div class="col-1 text-center">
-                            <button class="btn btn-primary btn-sm submit-exercise" data-exercise="${exercise.id}" data-index="${index}"><i class="bi bi-caret-right"></i></button>
+                        <div class="col-2 text-center">
+                            <button class="btn btn-primary btn-sm submit-exercise" data-exercise="${exercise.id}" data-index="${index}">Submit <i class="bi bi-caret-right"></i></button>
                         </div>
-                        <div class="col-3 text-end">
+                        <div class="col-2 text-end">
                             <span id="${exercise.id}-output-${index}"></span>
                             <i class="bi bi-x-circle clear-exercise" data-exercise="${exercise.id}" data-index="${index}" title="Clear exercise"></i>
                         </div>
