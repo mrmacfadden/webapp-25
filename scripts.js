@@ -267,54 +267,88 @@ const ExerciseTracker = {
 
 // TIMER NAVBAR FUNCTIONALITY
 const navbar   = document.getElementById('timerNavbar');
-  const timerBtn = document.getElementById('timerBtn');
-  const icon     = document.getElementById('stopwatchIcon');
-  let active = false, tid = null, startTime = 0;
-  let audioCtx = null;
+const timerBtn = document.getElementById('timerBtn');
+const icon     = document.getElementById('stopwatchIcon');
+let active = false, tid = null, startTime = 0;
+let audioCtx = null;
 
-  timerBtn.addEventListener('click', () => {
-    if (active) reset(); else start();
+// Timer duration (in milliseconds) - load from localStorage or default to 30 seconds
+let timerDuration = parseInt(localStorage.getItem('timerDuration') || '30') * 1000;
+
+// Function to highlight the selected timer duration in the menu
+function updateTimerMenuHighlight() {
+  const currentDuration = timerDuration / 1000;
+  document.querySelectorAll('.timer-duration-option').forEach(option => {
+    const duration = parseInt(option.getAttribute('data-duration'));
+    if (duration === currentDuration) {
+      option.classList.add('active');
+    } else {
+      option.classList.remove('active');
+    }
   });
+}
 
-  function start() {
+// Initialize timer duration options
+document.querySelectorAll('.timer-duration-option').forEach(option => {
+  option.addEventListener('click', (e) => {
+    e.preventDefault();
+    const duration = parseInt(e.target.getAttribute('data-duration'));
+    timerDuration = duration * 1000;
+    localStorage.setItem('timerDuration', duration);
+    updateTimerMenuHighlight();
+  });
+});
+
+// Highlight the selected duration on page load
+updateTimerMenuHighlight();
+
+// Only start timer on stopwatch icon click, not on dropdown toggle
+document.getElementById('stopwatchIcon').addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (active) reset(); else start();
+});
+
+function start() {
     active = true;
     startTime = Date.now();
     navbar.classList.add('active');
     icon.classList.replace('bi-stopwatch', 'bi-stopwatch-fill');
     icon.classList.add('stopwatch-active');
 
+    // Set dynamic animation duration based on timerDuration
+    const durationSeconds = timerDuration / 1000;
+    navbar.style.setProperty('--animation-duration', `${durationSeconds}s`);
+
     void navbar.offsetWidth;
-    tid = setTimeout(reset, 30000);
+    tid = setTimeout(reset, timerDuration);
+  }function reset() {
+  clearTimeout(tid);
+  const finishedNaturally = active && Date.now() >= startTime + timerDuration;
+
+  active = false;
+  navbar.classList.remove('active');
+  icon.classList.replace('bi-stopwatch-fill', 'bi-stopwatch');
+  icon.classList.remove('stopwatch-active');
+
+  if (finishedNaturally) {
+    playBeep();
   }
+}
 
-  function reset() {
-    clearTimeout(tid);
-    const finishedNaturally = active && Date.now() >= startTime + 30000;
-
-    active = false;
-    navbar.classList.remove('active');
-    icon.classList.replace('bi-stopwatch-fill', 'bi-stopwatch');
-    icon.classList.remove('stopwatch-active');
-
-    if (finishedNaturally) {
-      playBeep();
-    }
+function playBeep() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
 
-  function playBeep() {
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
+  osc.frequency.value = 200;
+  osc.type = 'square';
+  gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
 
-    osc.frequency.value = 200;
-    osc.type = 'square';
-    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-
-    osc.start();
-    osc.stop(audioCtx.currentTime + 0.5);
-  }
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.5);
+}

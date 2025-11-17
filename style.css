@@ -89,9 +89,10 @@ Navbar Timer
 =================================================
 */
 .navbar-timer {
-    overflow: hidden;
+    overflow: visible;
     transition: background-color 0.3s ease;
     padding-bottom: 3px; /* Makes room for the bar */
+    z-index: 1030; /* Ensure navbar is above content */
   }
 
   /* YouTube-style progress bar (3px at bottom) */
@@ -109,9 +110,13 @@ Navbar Timer
     box-shadow: 0 0 2px rgba(220, 53, 69, 0.8);
   }
 
+  .navbar-timer.active {
+    background-color: #ffe5e5 !important;
+  }
+
   .navbar-timer.active::after {
     width: 100%;
-    animation: timerProgress 30s linear forwards;
+    animation: timerProgress var(--animation-duration, 30s) linear forwards;
   }
 
   @keyframes timerProgress {
@@ -132,6 +137,21 @@ Navbar Timer
 
   .navbar-brand, .bi-stopwatch {
     z-index: 2;
+  }
+
+  #timerBtn {
+    text-decoration: none !important;
+  }
+
+  .dropdown-menu .dropdown-item {
+    text-decoration: none;
+  }
+
+  .dropdown-menu .dropdown-item.active {
+    background-color: #e9ecef;
+    color: #000;
+    font-weight: 600;
+    text-decoration: none;
   }
 
 /* Remove outline, border, and box-shadow from navbar toggler */

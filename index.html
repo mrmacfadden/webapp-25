@@ -34,10 +34,18 @@
         <!-- Brand -->
         <span class="navbar-brand mb-0 h1">SWOLL</span>
 
-        <!-- Stopwatch Timer Button -->
-        <button id="timerBtn" class="btn btn-link text-dark p-0 border-0" style="font-size: 1.5rem;">
-            <i class="bi bi-stopwatch" id="stopwatchIcon"></i>
-        </button>
+        <!-- Stopwatch Timer Button with Dropdown -->
+        <div class="dropdown">
+            <button id="timerBtn" class="btn btn-link text-dark p-0 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 1.5rem;">
+                <i class="bi bi-stopwatch" id="stopwatchIcon"></i>
+                <i class="bi bi-caret-down-fill" style="font-size: 0.75rem; margin-left: 0.25rem;"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item timer-duration-option" href="#" data-duration="30">30 seconds</a></li>
+                <li><a class="dropdown-item timer-duration-option" href="#" data-duration="60">60 seconds</a></li>
+                <li><a class="dropdown-item timer-duration-option" href="#" data-duration="90">90 seconds</a></li>
+            </ul>
+        </div>
         </div>
     </nav>
 
