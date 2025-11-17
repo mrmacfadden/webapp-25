@@ -143,6 +143,23 @@ Navbar Timer
     text-decoration: none !important;
   }
 
+  /* Workout menu styling */
+  #workout-menu .list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #dee2e6;
+  }
+
+  #workout-menu .list-group-item a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  #workout-menu .list-group-item a:hover {
+    background-color: #f8f9fa;
+  }
+
   .dropdown-menu .dropdown-item {
     text-decoration: none;
   }
