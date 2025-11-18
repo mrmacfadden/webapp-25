@@ -47,7 +47,15 @@ const EXERCISES = [
         image: 'img/twisting_situp.jpg',
         gif: 'img/twisting_situp.gif',
         weight: false
-    }
+    },
+    {
+        id: 'landmineshoulderpress',
+        name: 'Landmine Shoulder Press',
+        targetReps: 10,
+        image: 'img/landmine_shoulder_press.jpg',
+        gif: 'img/landmine_shoulder_press.gif',
+        weight: true
+    },
 ];
 
 // WORKOUT PRESETS - Define different workout routines
@@ -86,7 +94,9 @@ const ExerciseTracker = {
         enableZoom: true,
         captionsData: 'alt',
         animationSpeed: 250,
-        history: false
+        history: false,
+        showThumbnails: false,
+        nav: false
     },
     _lightboxInstance: null,
 
@@ -209,23 +219,35 @@ const ExerciseTracker = {
         // Update the workout title in the navbar
         updateWorkoutTitle(selection);
 
+        // Track occurrence count for each exercise
+        const exerciseOccurrences = {};
+        
         exercisesToRender.forEach((exercise, index) => {
-            const rowHTML = this.createExerciseRowHTML(exercise, index);
+            const exerciseNumber = EXERCISES.findIndex(e => e.id === exercise.id) + 1;
+            
+            // Count which occurrence this is (1st, 2nd, 3rd, etc.)
+            if (!exerciseOccurrences[exerciseNumber]) {
+                exerciseOccurrences[exerciseNumber] = 0;
+            }
+            exerciseOccurrences[exerciseNumber]++;
+            const occurrenceNumber = exerciseOccurrences[exerciseNumber];
+            
+            const rowHTML = this.createExerciseRowHTML(exercise, index, exerciseNumber, occurrenceNumber);
             container.insertAdjacentHTML('beforeend', rowHTML);
         });
 
         this.initExerciseListeners();
     },
 
-    createExerciseRowHTML(exercise, index) {
+    createExerciseRowHTML(exercise, displayIndex, exerciseNumber, occurrenceNumber) {
         const weightColHtml = exercise.weight 
             ? `<div class="col-4">
-                    <input type="number" id="${exercise.id}-weight-${index}" placeholder="weight..." class="exercise-input">
+                    <input type="number" id="${exercise.id}-weight-${displayIndex}" placeholder="weight..." class="exercise-input">
                 </div>`
             : `<div class="col-4"></div>`;
         
         return `
-            <div class="row exercise-row" data-exercise-id="${exercise.id}" data-index="${index + 1}">
+            <div class="row exercise-row" data-exercise-id="${exercise.id}" data-display-index="${displayIndex}" data-exercise-number="${exerciseNumber}" data-occurrence="${occurrenceNumber}">
                 <div class="col-2">
                     <a href="${exercise.gif}" class="lightbox">
                         <img src="${exercise.image}" class="img-fluid gallery-image w-full h-48 object-cover transition duration-200" alt="${exercise.name}">
@@ -237,15 +259,15 @@ const ExerciseTracker = {
                     </div>
                     <div class="row">
                         <div class="col-4">
-                            <input type="number" id="${exercise.id}-reps-${index}" placeholder="reps..." class="exercise-input">
+                            <input type="number" id="${exercise.id}-reps-${displayIndex}" placeholder="reps..." class="exercise-input">
                         </div>
                         ${weightColHtml}
                         <div class="col-2 text-center">
-                            <button class="btn btn-primary btn-sm submit-exercise" data-exercise="${exercise.id}" data-index="${index}">Submit <i class="bi bi-caret-right"></i></button>
+                            <button class="btn btn-primary btn-sm submit-exercise" data-exercise="${exercise.id}" data-display-index="${displayIndex}" data-exercise-number="${exerciseNumber}" data-occurrence="${occurrenceNumber}"><span class="d-none d-sm-inline">Submit </span><i class="bi bi-caret-right"></i></button>
                         </div>
                         <div class="col-2 text-end">
-                            <span id="${exercise.id}-output-${index}"></span>
-                            <i class="bi bi-x-circle clear-exercise" data-exercise="${exercise.id}" data-index="${index}" title="Clear exercise"></i>
+                            <span id="${exercise.id}-output-${displayIndex}"></span>
+                            <i class="bi bi-x-circle clear-exercise" data-exercise="${exercise.id}" data-display-index="${displayIndex}" data-exercise-number="${exerciseNumber}" data-occurrence="${occurrenceNumber}" title="Clear exercise"></i>
                         </div>
                     </div>
                 </div>
@@ -256,35 +278,84 @@ const ExerciseTracker = {
     initExerciseListeners() {
         document.querySelectorAll('.submit-exercise').forEach(button => {
             button.addEventListener('click', (e) => {
-                const exercise = e.target.getAttribute('data-exercise');
-                const index = e.target.getAttribute('data-index');
-                this.updateExercise(exercise, index);
+                // Get the button element (in case user clicks on the icon or span inside)
+                const btn = e.target.closest('.submit-exercise');
+                const exercise = btn.getAttribute('data-exercise');
+                const displayIndex = btn.getAttribute('data-display-index');
+                const exerciseNumber = btn.getAttribute('data-exercise-number');
+                const occurrenceNumber = btn.getAttribute('data-occurrence');
+                this.updateExercise(exercise, displayIndex, exerciseNumber, occurrenceNumber);
             });
         });
 
         document.querySelectorAll('.clear-exercise').forEach(icon => {
             icon.addEventListener('click', (e) => {
                 const exercise = e.target.getAttribute('data-exercise');
-                const index = e.target.getAttribute('data-index');
-                this.clearExercise(exercise, index);
+                const displayIndex = e.target.getAttribute('data-display-index');
+                const exerciseNumber = e.target.getAttribute('data-exercise-number');
+                const occurrenceNumber = e.target.getAttribute('data-occurrence');
+                this.clearExercise(exercise, displayIndex, exerciseNumber, occurrenceNumber);
             });
         });
     },
 
     initLightbox() {
-        try {
-            if (this._lightboxInstance && typeof this._lightboxInstance.destroy === 'function') {
-                this._lightboxInstance.destroy();
-            }
-        } catch (e) {
-            // ignore
-        }
-        this._lightboxInstance = new SimpleLightbox('a.lightbox', this.lightboxConfig);
+        // Simple click handler for lightbox images - no SimpleLightbox library issues
+        document.querySelectorAll('a.lightbox').forEach((link) => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const gifUrl = link.getAttribute('href');
+                const altText = link.querySelector('img')?.getAttribute('alt') || 'Exercise';
+                
+                // Create overlay and modal
+                const overlay = document.createElement('div');
+                overlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.9);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                    cursor: pointer;
+                `;
+                
+                const img = document.createElement('img');
+                img.src = gifUrl;
+                img.alt = altText;
+                img.style.cssText = `
+                    max-width: 90%;
+                    max-height: 90%;
+                    object-fit: contain;
+                    cursor: zoom-out;
+                `;
+                
+                // Close on click
+                overlay.addEventListener('click', () => {
+                    document.body.removeChild(overlay);
+                });
+                
+                // Also allow ESC key to close
+                const closeHandler = (e) => {
+                    if (e.key === 'Escape') {
+                        document.body.removeChild(overlay);
+                        document.removeEventListener('keydown', closeHandler);
+                    }
+                };
+                document.addEventListener('keydown', closeHandler);
+                
+                overlay.appendChild(img);
+                document.body.appendChild(overlay);
+            });
+        });
     },
 
-    updateExercise(exerciseId, index) {
-        const repsInput = document.getElementById(`${exerciseId}-reps-${index}`);
-        const weightInput = document.getElementById(`${exerciseId}-weight-${index}`);
+    updateExercise(exerciseId, displayIndex, exerciseNumber, occurrenceNumber) {
+        const repsInput = document.getElementById(`${exerciseId}-reps-${displayIndex}`);
+        const weightInput = document.getElementById(`${exerciseId}-weight-${displayIndex}`);
         const exercise = EXERCISES.find(e => e.id === exerciseId);
         
         const reps = repsInput.value;
@@ -296,8 +367,8 @@ const ExerciseTracker = {
         
         if (isValid) {
             const output = weight ? `${reps} x ${weight}` : reps;
-            document.getElementById(`${exerciseId}-output-${index}`).textContent = output;
-            this.saveExercise(exerciseId, reps, weight);
+            document.getElementById(`${exerciseId}-output-${displayIndex}`).textContent = output;
+            this.saveExercise(exerciseId, exerciseNumber, occurrenceNumber, reps, weight);
             
             const exerciseRow = repsInput.closest('.exercise-row');
             exerciseRow.classList.add('exercise-complete');
@@ -309,37 +380,43 @@ const ExerciseTracker = {
         }
     },
 
-    clearExercise(exerciseId, index) {
-        localStorage.removeItem(`exercise-${exerciseId}`);
+    clearExercise(exerciseId, displayIndex, exerciseNumber, occurrenceNumber) {
+        // Use both exerciseNumber and occurrenceNumber to create unique key
+        localStorage.removeItem(`exercise-${exerciseNumber}-occurrence-${occurrenceNumber}`);
         
-        const exerciseRow = document.querySelector(`[data-exercise-id="${exerciseId}"][data-index="${parseInt(index) + 1}"]`);
+        const exerciseRow = document.querySelector(`[data-exercise-id="${exerciseId}"][data-display-index="${displayIndex}"]`);
         exerciseRow.classList.remove('exercise-complete');
         
-        document.getElementById(`${exerciseId}-output-${index}`).textContent = '';
-        document.getElementById(`${exerciseId}-reps-${index}`).value = '';
+        document.getElementById(`${exerciseId}-output-${displayIndex}`).textContent = '';
+        document.getElementById(`${exerciseId}-reps-${displayIndex}`).value = '';
         
-        const weightInput = document.getElementById(`${exerciseId}-weight-${index}`);
+        const weightInput = document.getElementById(`${exerciseId}-weight-${displayIndex}`);
         if (weightInput) {
             weightInput.value = '';
         }
     },
 
-    saveExercise(exerciseId, reps, weight) {
-        localStorage.setItem(`exercise-${exerciseId}`, JSON.stringify([reps, weight]));
+    saveExercise(exerciseId, exerciseNumber, occurrenceNumber, reps, weight) {
+        // Use both exerciseNumber and occurrenceNumber for unique storage
+        localStorage.setItem(`exercise-${exerciseNumber}-occurrence-${occurrenceNumber}`, JSON.stringify([reps, weight]));
     },
 
     loadSavedValues() {
         document.querySelectorAll('.exercise-row').forEach(row => {
             const exerciseId = row.getAttribute('data-exercise-id');
             const exercise = EXERCISES.find(e => e.id === exerciseId);
-            const saved = localStorage.getItem(`exercise-${exerciseId}`);
+            const displayIndex = row.getAttribute('data-display-index');
+            const exerciseNumber = row.getAttribute('data-exercise-number');
+            const occurrenceNumber = row.getAttribute('data-occurrence');
+            
+            // Use both exerciseNumber and occurrenceNumber to retrieve correct value
+            const saved = localStorage.getItem(`exercise-${exerciseNumber}-occurrence-${occurrenceNumber}`);
             
             if (saved) {
                 const [reps, weight] = JSON.parse(saved);
-                const index = parseInt(row.getAttribute('data-index')) - 1;
                 
                 const output = exercise.weight ? `${reps} x ${weight}` : reps;
-                document.getElementById(`${exerciseId}-output-${index}`).textContent = output;
+                document.getElementById(`${exerciseId}-output-${displayIndex}`).textContent = output;
                 // Don't add the exercise-complete class on page load
                 // row.classList.add('exercise-complete');
             }
@@ -403,7 +480,9 @@ function start() {
 
     void navbar.offsetWidth;
     tid = setTimeout(reset, timerDuration);
-  }function reset() {
+}
+
+function reset() {
   clearTimeout(tid);
   const finishedNaturally = active && Date.now() >= startTime + timerDuration;
 

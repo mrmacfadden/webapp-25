@@ -11,6 +11,23 @@ body {
     padding: 1rem 0;
     border-bottom: 1px solid #dee2e6;
     transition: background-color 0.3s ease;
+    position: relative;
+}
+
+.exercise-row::after {
+    content: attr(data-exercise-number);
+    position: absolute;
+    right: 1rem;
+    top: 0.5rem;
+    font-size: 0.75rem;
+    color: #adb5bd;
+    font-weight: normal;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.exercise-row:hover::after {
+    opacity: 1;
 }
 
 .exercise-row img { 
