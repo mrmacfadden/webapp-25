@@ -59,6 +59,16 @@ input.exercise-input {
     font-size: 0.875rem;
 }
 
+.navbar-brand {
+    font-family: 'Anton', sans-serif;
+    letter-spacing: 0.05em;
+    font-size: 24px;
+}
+.navbar-brand a {
+    text-decoration: none;
+    color: #000;
+}
+
 /* LIGHT BOX */
 /* Custom styles for image hover effect */
 .image-link {

@@ -51,19 +51,43 @@ const EXERCISES = [
     {
         id: 'landmineshoulderpress',
         name: 'Landmine Shoulder Press',
-        targetReps: 10,
+        targetReps: 12,
         image: 'img/landmine_shoulder_press.jpg',
         gif: 'img/landmine_shoulder_press.gif',
         weight: true
     },
+    {
+        id: 'inclinedumbbellpress',
+        name: 'Incline Dumbbell Press',
+        targetReps: 12,
+        image: 'img/incline_dumbbell_press.jpg',
+        gif: 'img/incline_dumbbell_press.gif',
+        weight: true
+    },
+    {
+        id: 'trxchestfly',
+        name: 'TRX Chest Fly',
+        targetReps: 15,
+        image: 'img/trx_chest_fly.jpg',
+        gif: 'img/trx_chest_fly.gif',
+        weight: false
+    },
+    {
+        id: 'benchdips',
+        name: 'Bench Dips',
+        targetReps: '20',
+        image: 'img/bench_dips.jpg',
+        gif: 'img/bench_dips.gif',
+        weight: false
+    }
 ];
 
 // WORKOUT PRESETS - Define different workout routines
 const WORKOUT_PRESETS = [
     {
-        name: 'Full Body',
-        description: 'All exercises',
-        exercises: [1, 2, 3, 4, 5]
+        name: 'Push 1',
+        description: 'Chest and Triceps',
+        exercises: [3, 3, 3, 3, 7, 7, 7, 8, 8, 8, 9, 5, 9, 5, 9, 5, 10]
     },
     {
         name: 'Leg Day',
@@ -241,14 +265,14 @@ const ExerciseTracker = {
 
     createExerciseRowHTML(exercise, displayIndex, exerciseNumber, occurrenceNumber) {
         const weightColHtml = exercise.weight 
-            ? `<div class="col-4">
+            ? `<div class="col-3 col-sm-4">
                     <input type="number" id="${exercise.id}-weight-${displayIndex}" placeholder="weight..." class="exercise-input">
                 </div>`
-            : `<div class="col-4"></div>`;
+            : `<div class="col-3 col-sm-4"></div>`;
         
         return `
             <div class="row exercise-row" data-exercise-id="${exercise.id}" data-display-index="${displayIndex}" data-exercise-number="${exerciseNumber}" data-occurrence="${occurrenceNumber}">
-                <div class="col-2">
+                <div class="col-2 d-flex align-items-center">
                     <a href="${exercise.gif}" class="lightbox">
                         <img src="${exercise.image}" class="img-fluid gallery-image w-full h-48 object-cover transition duration-200" alt="${exercise.name}">
                     </a>
@@ -258,14 +282,14 @@ const ExerciseTracker = {
                         <div class="col">${exercise.name}: ${exercise.targetReps}</div>
                     </div>
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-3 col-sm-4">
                             <input type="number" id="${exercise.id}-reps-${displayIndex}" placeholder="reps..." class="exercise-input">
                         </div>
                         ${weightColHtml}
                         <div class="col-2 text-center">
                             <button class="btn btn-primary btn-sm submit-exercise" data-exercise="${exercise.id}" data-display-index="${displayIndex}" data-exercise-number="${exerciseNumber}" data-occurrence="${occurrenceNumber}"><span class="d-none d-sm-inline">Submit </span><i class="bi bi-caret-right"></i></button>
                         </div>
-                        <div class="col-2 text-end">
+                        <div class="col-4 col-sm-2 text-end">
                             <span id="${exercise.id}-output-${displayIndex}"></span>
                             <i class="bi bi-x-circle clear-exercise" data-exercise="${exercise.id}" data-display-index="${displayIndex}" data-exercise-number="${exerciseNumber}" data-occurrence="${occurrenceNumber}" title="Clear exercise"></i>
                         </div>
