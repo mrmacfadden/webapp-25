@@ -79,6 +79,46 @@ const EXERCISES = [
         image: 'img/bench_dips.jpg',
         gif: 'img/bench_dips.gif',
         weight: false
+    },
+    {
+        id: 'barbellbentoverrow',
+        name: 'Barbell Bent Over Row',
+        targetReps: '12',
+        image: 'img/barbell_bent_over_row.jpg',
+        gif: 'img/barbell_bent_over_row.gif',
+        weight: true
+    },
+    {
+        id: 'trxinvertedrow',
+        name: 'TRX Inverted Row',
+        targetReps: '15',
+        image: 'img/trx_inverted_row.jpg',
+        gif: 'img/trx_inverted_row.gif',
+        weight: true
+    },
+    {
+        id: 'dumbbellbicepcurl',
+        name: 'Dumbbell Bicep Curl',
+        targetReps: '12',
+        image: 'img/dumbbell_bicep_curl.jpg',
+        gif: 'img/dumbbell_bicep_curl.gif',
+        weight: true
+    },
+    {
+        id: 'ammercurl',
+        name: 'Hammer Curl',
+        targetReps: '12',
+        image: 'img/hammer_curl.jpg',
+        gif: 'img/hammer_curl.gif',
+        weight: true
+    },
+    {
+        id: 'resistancebandfacepull',
+        name: 'Resistance Band Face Pull',
+        targetReps: '15',
+        image: 'img/resistance_band_face_pulls.jpg',
+        gif: 'img/resistance_band_face_pulls.gif',
+        weight: true
     }
 ];
 
@@ -90,9 +130,9 @@ const WORKOUT_PRESETS = [
         exercises: [3, 3, 3, 3, 7, 7, 7, 8, 8, 8, 9, 5, 9, 5, 9, 5, 10]
     },
     {
-        name: 'Leg Day',
-        description: 'Lower body focus',
-        exercises: [1, 2]
+        name: 'Pull 1',
+        description: 'Back and Biceps',
+        exercises: [11, 11, 11, 11, 12, 12, 12, 13, 13, 13, 14, 15, 14, 15, 14, 15]
     },
     {
         name: 'Upper Body',
