@@ -130,24 +130,44 @@ const WORKOUT_PRESETS = [
         exercises: [3, 3, 3, 3, 7, 7, 7, 8, 8, 8, 9, 5, 9, 5, 9, 5, 10]
     },
     {
+        name: 'Push 2',
+        description: 'Chest and Triceps',
+        exercises: [3]
+    },
+    {
+        name: 'Push 3',
+        description: 'Chest and Triceps',
+        exercises: [3, 3]
+    },
+    {
         name: 'Pull 1',
         description: 'Back and Biceps',
         exercises: [11, 11, 11, 11, 12, 12, 12, 13, 13, 13, 14, 15, 14, 15, 14, 15]
     },
     {
-        name: 'Upper Body',
-        description: 'Chest, back, arms',
-        exercises: [3, 4, 5]
+        name: 'Pull 2',
+        description: 'Back and Biceps',
+        exercises: [11, 11]
     },
     {
-        name: 'Strength',
-        description: 'Heavy compound lifts',
-        exercises: [1, 2, 3]
+        name: 'Pull 3',
+        description: 'Back and Biceps',
+        exercises: [11, 11, 11, 11, 12, 12, 12, 13, 13]
     },
     {
-        name: 'Endurance',
-        description: 'High reps',
-        exercises: [4, 5]
+        name: 'Legs 1',
+        description: 'Calfs, Quads, Glutes, Hamstrings',
+        exercises: []
+    },
+    {
+        name: 'Legs 2',
+        description: 'Calfs, Quads, Glutes, Hamstrings',
+        exercises: []
+    },
+    {
+        name: 'Legs 3',
+        description: 'Calfs, Quads, Glutes, Hamstrings',
+        exercises: []
     }
 ];
 
